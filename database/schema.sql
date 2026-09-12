@@ -123,6 +123,9 @@ create table if not exists events (
   starts_at timestamptz not null,
   ends_at timestamptz,
   venue text,
+  location text,
+  price numeric(10,2) default 0,
+  contact_information text,
   created_at timestamptz not null default now()
 );
 

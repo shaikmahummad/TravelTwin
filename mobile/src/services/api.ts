@@ -1,5 +1,6 @@
 import axios from "axios";
 import { destinations as fallbackDestinations } from "../data/mockData";
+import { API_BASE_URL } from "../config";
 
 export type TwinData = {
   status: {
@@ -13,6 +14,7 @@ export type TwinData = {
     recommended_next_place?: string;
   };
   alerts: Array<{ title?: string; message?: string; severity?: string; is_active?: boolean }>;
+  events?: Array<{ name?: string; event_type?: string; starts_at?: string; location?: string; description?: string; price?: number }>;
 };
 
 export type CultureData = {
@@ -20,7 +22,7 @@ export type CultureData = {
 };
 
 export const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL || "http://localhost:8000",
+  baseURL: API_BASE_URL,
   timeout: 5000,
 });
 
@@ -31,6 +33,13 @@ export async function fetchDestinations() {
   } catch {
     return fallbackDestinations;
   }
+}
+
+export const getDestinations = fetchDestinations;
+
+export async function getDestinationById(id: string) {
+  const response = await api.get(`/destinations/${id}`);
+  return response.data;
 }
 
 export async function saveTravellerProfile(profile: Record<string, unknown>) {
@@ -60,14 +69,19 @@ export async function fetchDestinationTwin(id: string) {
         recommended_next_place: "Queen's Bath",
       },
       alerts: [],
+      events: [{ name: "Vijayanagara storytelling walk", event_type: "heritage walk", starts_at: "2026-09-12T16:30:00", location: "Hampi Bazaar", description: "A short local story walk through the old market.", price: 0 }],
     };
   }
 }
+
+export const getDigitalTwinStatus = fetchDestinationTwin;
 
 export async function requestSmartReroute(payload: Record<string, unknown>) {
   const response = await api.post("/smart-reroute", payload);
   return response.data;
 }
+
+export const getSmartReroute = requestSmartReroute;
 
 export async function fetchCulture(id: string): Promise<CultureData> {
   try {
@@ -89,7 +103,20 @@ export async function fetchCulture(id: string): Promise<CultureData> {
   }
 }
 
+export const getCultureLayer = fetchCulture;
+
 export async function askGuide(question: string, destinationId?: string) {
   const response = await api.post("/chat", { user_id: "00000000-0000-0000-0000-000000000001", question, destination_id: destinationId });
   return response.data.answer as string;
+}
+
+export const sendChatMessage = askGuide;
+
+export async function getEvents(destinationId?: string) {
+  try {
+    const response = await api.get(destinationId ? `/events?destination_id=${destinationId}` : "/events");
+    return response.data.items || response.data;
+  } catch (error) {
+    throw new Error("Events are temporarily unavailable. Please try again.");
+  }
 }

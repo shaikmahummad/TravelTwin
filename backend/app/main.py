@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import get_settings
-from .routes import admin, alerts, chat, culture, destinations, digital_twin, itinerary, traveller
+from .routes import admin, alerts, chat, culture, destinations, digital_twin, events, itinerary, traveller
 
 settings = get_settings()
 app = FastAPI(title="TravelTwin API", version="0.1.0")
@@ -23,6 +23,7 @@ app.include_router(itinerary.router)
 app.include_router(alerts.router)
 app.include_router(chat.router)
 app.include_router(admin.router)
+app.include_router(events.router)
 
 
 @app.get("/health", tags=["system"])

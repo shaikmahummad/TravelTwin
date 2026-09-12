@@ -19,8 +19,10 @@ def get_digital_twin(destination_id: str):
     live_status.setdefault("nearby_cultural_event", "Local heritage story walk at 4:30 PM")
     live_status.setdefault("recommended_next_place", "The next quieter cultural highlight")
     alerts = related_rows("alerts", "destination_id", destination_id)
+    events = related_rows("events", "destination_id", destination_id)
     return {
         "destination_id": destination_id,
         "status": live_status,
         "alerts": [alert for alert in alerts if alert.get("is_active", True)],
+        "events": events,
     }
