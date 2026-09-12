@@ -1,0 +1,9 @@
+{
+  "expo": {
+    "name": "TravelTwin",
+    "slug": "traveltwin",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "traveltwin"
+  }
+}

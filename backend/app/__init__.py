@@ -1,0 +1,1 @@
+"""TravelTwin FastAPI application."""
