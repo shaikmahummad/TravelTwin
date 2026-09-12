@@ -27,12 +27,13 @@ class ItineraryRequest(BaseModel):
 
 
 class RerouteRequest(BaseModel):
-    destination_id: UUID
+    destination_id: str
     crowd_level: str = "moderate"
     weather: str = "clear"
     safety: str = "all_clear"
     route_status: str = "open"
     walking_comfort: str = "comfortable"
+    interests: list[str] = Field(default_factory=list)
 
 
 class ChatRequest(BaseModel):

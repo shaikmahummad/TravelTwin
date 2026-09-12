@@ -12,16 +12,18 @@ import { DigitalTwinScreen } from "../screens/DigitalTwinScreen";
 import { CultureScreen } from "../screens/CultureScreen";
 import { ChatGuideScreen } from "../screens/ChatGuideScreen";
 import { SafetyScreen } from "../screens/SafetyScreen";
+import { RerouteScreen } from "../screens/RerouteScreen";
 
 export type Destination = { id: string; name: string; city: string; state: string; description: string; best_time_to_visit: string; crowd_level: string; image: string };
 export type RootStackParamList = {
   Welcome: undefined; Login: undefined; TravellerTwin: undefined; Home: { name?: string } | undefined;
   Destinations: undefined; DestinationDetail: { destination: Destination }; Planner: { destination?: string } | undefined;
   DigitalTwin: { destination: Destination }; Culture: { destination: Destination }; ChatGuide: undefined; Safety: undefined;
+  Reroute: { destination: Destination };
 };
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export function AppNavigator() {
   return <NavigationContainer><Stack.Navigator initialRouteName="Welcome" screenOptions={{ headerShown: false, contentStyle: { backgroundColor: "#F8F7F3" } }}>
-    <Stack.Screen name="Welcome" component={WelcomeScreen} /><Stack.Screen name="Login" component={LoginScreen} /><Stack.Screen name="TravellerTwin" component={TravellerTwinScreen} /><Stack.Screen name="Home" component={HomeScreen} /><Stack.Screen name="Destinations" component={DestinationListScreen} /><Stack.Screen name="DestinationDetail" component={DestinationDetailScreen} /><Stack.Screen name="Planner" component={PlannerScreen} /><Stack.Screen name="DigitalTwin" component={DigitalTwinScreen} /><Stack.Screen name="Culture" component={CultureScreen} /><Stack.Screen name="ChatGuide" component={ChatGuideScreen} /><Stack.Screen name="Safety" component={SafetyScreen} />
+    <Stack.Screen name="Welcome" component={WelcomeScreen} /><Stack.Screen name="Login" component={LoginScreen} /><Stack.Screen name="TravellerTwin" component={TravellerTwinScreen} /><Stack.Screen name="Home" component={HomeScreen} /><Stack.Screen name="Destinations" component={DestinationListScreen} /><Stack.Screen name="DestinationDetail" component={DestinationDetailScreen} /><Stack.Screen name="Planner" component={PlannerScreen} /><Stack.Screen name="DigitalTwin" component={DigitalTwinScreen} /><Stack.Screen name="Reroute" component={RerouteScreen} /><Stack.Screen name="Culture" component={CultureScreen} /><Stack.Screen name="ChatGuide" component={ChatGuideScreen} /><Stack.Screen name="Safety" component={SafetyScreen} />
   </Stack.Navigator></NavigationContainer>;
 }
