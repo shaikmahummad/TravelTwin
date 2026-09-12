@@ -1,0 +1,15 @@
+export const colors = {
+  indigo: "#3F438D",
+  indigoSoft: "#EEF0FB",
+  saffron: "#E87945",
+  emerald: "#4B9278",
+  emeraldSoft: "#E3F1EB",
+  warmWhite: "#F8F7F3",
+  white: "#FFFFFF",
+  charcoal: "#20212B",
+  muted: "#737584",
+  line: "#E8E6E1",
+  danger: "#C95F55",
+  dangerSoft: "#F9E2DE",
+  sand: "#F3E8D8",
+};

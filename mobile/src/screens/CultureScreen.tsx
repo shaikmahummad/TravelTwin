@@ -1,0 +1,9 @@
+import React from "react";
+import { ScrollView, StyleSheet, Text } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AppCard } from "../components/AppCard";
+import { AppButton } from "../components/AppButton";
+import { colors } from "../theme/colors";
+import { RootStackParamList } from "../navigation/AppNavigator";
+export function CultureScreen({ route }: NativeStackScreenProps<RootStackParamList, "Culture">) { return <ScrollView contentContainerStyle={styles.page}><Text style={styles.kicker}>CULTURE LAYER · {route.params.destination.name.toUpperCase()}</Text><Text style={styles.title}>The stone chariot</Text><Text style={styles.lead}>A moving story, carved in granite.</Text><AppCard><Text style={styles.body}>Built in the 16th century, this iconic chariot is a shrine to Garuda, the mount of Vishnu. Look closely: the stone wheels were designed to turn, and floral details carry the signature of Vijayanagara artisans.</Text></AppCard><AppCard style={styles.tip}><Text style={styles.tipTitle}>LOCAL TIP</Text><Text style={styles.body}>Visit before 11 AM for softer light and fewer tour groups. Dress respectfully and ask before photographing people.</Text></AppCard><AppButton title="Play audio guide · 2 min" onPress={() => {}} /></ScrollView>; }
+const styles = StyleSheet.create({ page: { padding: 20, paddingTop: 30, gap: 13, backgroundColor: colors.warmWhite }, kicker: { color: colors.saffron, fontSize: 10, fontWeight: "700", letterSpacing: 1 }, title: { color: colors.charcoal, fontSize: 32, fontWeight: "700" }, lead: { color: "#8B6C5C", fontStyle: "italic", fontSize: 15, marginBottom: 6 }, body: { color: colors.muted, fontSize: 13, lineHeight: 21 }, tip: { backgroundColor: colors.sand, borderColor: colors.sand }, tipTitle: { color: "#A45A37", fontSize: 10, fontWeight: "700", marginBottom: 7 } });
