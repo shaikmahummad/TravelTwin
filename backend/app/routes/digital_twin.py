@@ -24,5 +24,5 @@ def get_digital_twin(destination_id: str):
         "destination_id": destination_id,
         "status": live_status,
         "alerts": [alert for alert in alerts if alert.get("is_active", True)],
-        "events": events,
+        "events": [{**event, "location": event.get("location") or event.get("venue")} for event in events],
     }
