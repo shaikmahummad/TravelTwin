@@ -4,6 +4,9 @@
     "slug": "traveltwin",
     "version": "0.1.0",
     "orientation": "portrait",
-    "scheme": "traveltwin"
+    "scheme": "traveltwin",
+    "plugins": [
+      "expo-asset"
+    ]
   }
 }
