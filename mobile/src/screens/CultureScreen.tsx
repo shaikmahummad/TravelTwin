@@ -16,7 +16,9 @@ export function CultureScreen({ route }: NativeStackScreenProps<RootStackParamLi
     <CultureCard title="Local story" text={String(story.local_story || "Ask a local storyteller what visitors usually miss.")} />
     <CultureCard title="Tradition connected to this place" text={String(story.traditions || "Observe local rituals quietly and support the community that keeps them alive.")} />
     <CultureCard title="Festival connection" text={String(story.festival_connection || "Seasonal festivals bring music, food and community stories to the heritage landscape.")} />
-    <CultureCard title="Local food & craft nearby" text={String(story.food_and_craft_notes || "Try a regional meal and look for a family-run craft workshop.")} />
+    <CultureCard title="Explain simply" text={String(story.explain_simply || "This is a living heritage place, not just a collection of old buildings.")} />
+    <CultureCard title="Local food nearby" text={String(story.local_food_note || story.food_and_craft_notes || "Try a regional meal at a family-run local spot.")} />
+    <CultureCard title="Local craft nearby" text={String(story.local_craft_note || "Look for a family-run craft workshop and buy directly from the maker.")} />
     <View style={styles.columns}><ListCard title="DO" items={story.dos} tone="good" /><ListCard title="DON’T" items={story.donts} tone="caution" /></View>
   </ScrollView>;
 }

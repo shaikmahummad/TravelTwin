@@ -3,6 +3,7 @@ async function request(path, options = {}) { const response = await fetch(`${bas
 export const adminApi = {
   list: (resource) => request(`/admin/${resource}`),
   saveDestination: (data) => request("/admin/destinations", { method: "POST", body: JSON.stringify(data) }),
+  deleteDestination: (id) => request(`/admin/destinations/${id}`, { method: "DELETE" }),
   saveTwinStatus: (data) => request("/admin/twin-status", { method: "POST", body: JSON.stringify(data) }),
   saveCulture: (data) => request("/admin/cultural-stories", { method: "POST", body: JSON.stringify(data) }),
 };
