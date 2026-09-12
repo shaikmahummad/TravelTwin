@@ -39,7 +39,7 @@ export function DigitalTwinScreen({ navigation, route }: NativeStackScreenProps<
 }
 
 function Signal({ label, value }: { label: string; value: string }) {
-  return <View style={styles.signal}><Text style={styles.signalLabel}>{label}</Text><StatusBadge label={value.replace(/_/g, " ")} tone={label === "Crowd" ? "warning" : "default"} /></View>;
+  return <View style={styles.signal}><Text style={styles.signalLabel}>{label}</Text><StatusBadge label={value.replace(/_/g, " ")} tone={label === "Crowd" ? "warning" : "safe"} /></View>;
 }
 
 const styles = StyleSheet.create({
