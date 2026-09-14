@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
 
-from .supabase_service import get_row_by_field, list_rows, upsert_row
+from .supabase_service import get_row_by_field, upsert_row
 
 _mock_profiles: dict[str, dict[str, Any]] = {}
 

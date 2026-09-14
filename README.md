@@ -75,6 +75,18 @@ Mobile: `EXPO_PUBLIC_API_URL=http://localhost:8000`
 
 Admin: `VITE_API_URL=http://localhost:8000`
 
+## Phase 2: Traveller Twin personalization
+
+Phase 2 adds a simple Traveller Twin profile and a personalized home dashboard. The profile captures a traveller's name, style, interests, budget, walking comfort, language, and safety preference. The mobile flow is `WelcomeScreen -> TravellerTwinScreen -> HomeScreen`, with an edit action available from Home.
+
+The new `traveller_profiles` Supabase table uses a text `user_id` for the MVP. The backend exposes:
+
+- `POST /traveller-profile` to create or update a profile by `user_id`
+- `GET /traveller-profile/{user_id}` to fetch a profile
+- `GET /personalized-home/{user_id}` to return the profile summary, recommendation, reason, next action, cultural highlight, and digital twin preview
+
+Personalization is intentionally rule-based: Forts recommend Hampi, spiritual interests recommend Varanasi, Nature recommends Kaziranga, Food recommends Kochi, and other profiles default to Jaipur. No real AI, smart reroute, authentication, booking, payments, or maps are included yet. The next planned phase is the Smart Itinerary Planner.
+
 ## API MVP
 
 - `GET /health`

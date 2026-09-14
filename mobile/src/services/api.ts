@@ -21,6 +21,27 @@ export type CultureData = {
   stories: Array<Record<string, string | string[]>>;
 };
 
+export type TravellerProfile = {
+  id?: string;
+  user_id: string;
+  name: string;
+  travel_style: string;
+  interests: string[];
+  budget_range: string;
+  walking_comfort: string;
+  preferred_language: string;
+  safety_preference: string;
+};
+
+export type PersonalizedHome = {
+  traveller_twin: TravellerProfile;
+  recommended_destination: { name: string; city: string; state: string; description: string };
+  reason: string;
+  suggested_next_action: string;
+  cultural_highlight: string;
+  digital_twin_preview: { status: string; summary: string };
+};
+
 export const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 5000,
@@ -42,9 +63,19 @@ export async function getDestinationById(id: string) {
   return response.data;
 }
 
-export async function saveTravellerProfile(profile: Record<string, unknown>) {
+export async function saveTravellerProfile(profile: Omit<TravellerProfile, "id">) {
   const response = await api.post("/traveller-profile", profile);
-  return response.data;
+  return response.data as TravellerProfile;
+}
+
+export async function getTravellerProfile(userId: string) {
+  const response = await api.get(`/traveller-profile/${userId}`);
+  return response.data as TravellerProfile;
+}
+
+export async function getPersonalizedHome(userId: string) {
+  const response = await api.get(`/personalized-home/${userId}`);
+  return response.data as PersonalizedHome;
 }
 
 export async function generateItinerary(payload: Record<string, unknown>) {

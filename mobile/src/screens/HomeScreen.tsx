@@ -1,14 +1,84 @@
-import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { AppButton } from "../components/AppButton";
 import { AppCard } from "../components/AppCard";
-import { TwinMetricCard } from "../components/TwinMetricCard";
+import { RecommendationCard } from "../components/RecommendationCard";
+import { SectionHeader } from "../components/SectionHeader";
+import { TwinSummaryCard } from "../components/TwinSummaryCard";
+import { getPersonalizedHome, PersonalizedHome } from "../services/api";
 import { colors } from "../theme/colors";
-import { RootStackParamList } from "../navigation/AppNavigator";
-import { twinStatus } from "../data/mockData";
-export function HomeScreen({ navigation, route }: NativeStackScreenProps<RootStackParamList, "Home">) {
-  const name = route.params?.name || "Aanya";
-  return <ScrollView contentContainerStyle={styles.page}><View style={styles.header}><View><Text style={styles.kicker}>SATURDAY · 12 SEP 2026</Text><Text style={styles.greeting}>Good morning, {name}</Text><Text style={styles.muted}>Your day in Hampi is looking beautiful.</Text></View><Text style={styles.avatar}>AS</Text></View><AppCard style={styles.twinCard}><Text style={styles.badge}>LIVE DESTINATION TWIN</Text><Text style={styles.heroTitle}>Hampi, in your rhythm.</Text><Text style={styles.heroCopy}>Three experiences tuned to your cultural explorer twin.</Text><AppButton title="Open live guide" onPress={() => navigation.navigate("DigitalTwin", { destination: { id: "hampi", name: "Hampi", city: "Hosapete", state: "Karnataka", description: "Vijayanagara ruins, boulders and river stories.", best_time_to_visit: "Oct – Feb", crowd_level: "Moderate", image: "https://images.unsplash.com/photo-1600100397608-f0107e2e5e9b?w=900" } })} /></AppCard><Text style={styles.heading}>Your twin today</Text><View style={styles.metrics}><TwinMetricCard icon="☼" label="Weather" value={twinStatus.weather} /><TwinMetricCard icon="◉" label="Crowd" value={twinStatus.crowd} /><TwinMetricCard icon="✓" label="Safety" value={twinStatus.safety} /></View><AppCard style={styles.highlight}><Text style={styles.kicker}>CULTURAL HIGHLIGHT</Text><Text style={styles.highlightTitle}>The stone chariot’s hidden story</Text><Text style={styles.muted}>Its wheels were once designed to spin.</Text></AppCard><Text style={styles.heading}>Make today yours</Text><View style={styles.actions}><AppButton title="Plan trip" onPress={() => navigation.navigate("Planner")} /><AppButton title="Explore destinations" variant="secondary" onPress={() => navigation.navigate("Destinations")} /><AppButton title="Ask AI guide" variant="secondary" onPress={() => navigation.navigate("ChatGuide")} /><AppButton title="Safety & offline" variant="secondary" onPress={() => navigation.navigate("Safety")} /></View></ScrollView>;
+import { Destination, RootStackParamList } from "../navigation/AppNavigator";
+
+const USER_ID = "demo-user";
+
+export function HomeScreen({ navigation }: NativeStackScreenProps<RootStackParamList, "Home">) {
+  const [home, setHome] = useState<PersonalizedHome | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const loadHome = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      setHome(await getPersonalizedHome(USER_ID));
+    } catch {
+      setHome(null);
+      setError("Create your Traveller Twin to unlock your personalized home.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { loadHome(); }, []);
+
+  if (loading) {
+    return <View style={styles.center}><ActivityIndicator color={colors.indigo} /><Text style={styles.muted}>Tuning your home...</Text></View>;
+  }
+
+  if (!home) {
+    return <View style={styles.empty}><Text style={styles.kicker}>WELCOME TO TRAVELTWIN</Text><Text style={styles.title}>India, made personal.</Text><Text style={styles.copy}>{error}</Text><AppButton title="Create my Traveller Twin" onPress={() => navigation.navigate("TravellerTwin")} /></View>;
+  }
+
+  const destination: Destination = {
+    id: home.recommended_destination.name.toLowerCase(),
+    name: home.recommended_destination.name,
+    city: home.recommended_destination.city,
+    state: home.recommended_destination.state,
+    description: home.recommended_destination.description,
+    best_time_to_visit: "October to March",
+    crowd_level: "moderate",
+    image: "",
+  };
+
+  return <ScrollView contentContainerStyle={styles.page}>
+    <View style={styles.header}><View><Text style={styles.kicker}>YOUR PERSONALIZED HOME</Text><Text style={styles.greeting}>Good morning, {home.traveller_twin.name}</Text><Text style={styles.muted}>A day shaped around your travel rhythm.</Text></View><Text style={styles.avatar}>{home.traveller_twin.name.slice(0, 2).toUpperCase()}</Text></View>
+    <TwinSummaryCard profile={home.traveller_twin} />
+    <Text style={styles.sectionSpacing}><SectionHeader title="A place picked for you" /></Text>
+    <RecommendationCard destination={home.recommended_destination.name} reason={home.reason} onPress={() => navigation.navigate("DigitalTwin", { destination })} />
+    <AppCard style={styles.preview}><Text style={styles.kicker}>DIGITAL TWIN PREVIEW</Text><Text style={styles.previewTitle}>{home.digital_twin_preview.status}</Text><Text style={styles.muted}>{home.digital_twin_preview.summary}</Text></AppCard>
+    <AppCard style={styles.highlight}><Text style={styles.kicker}>CULTURAL HIGHLIGHT</Text><Text style={styles.highlightTitle}>{home.cultural_highlight}</Text></AppCard>
+    <AppCard><Text style={styles.kicker}>SUGGESTED NEXT ACTION</Text><Text style={styles.action}>{home.suggested_next_action}</Text><AppButton title="Explore destinations" variant="secondary" onPress={() => navigation.navigate("Destinations")} /></AppCard>
+    <View style={styles.actions}><AppButton title="Edit my Traveller Twin" variant="secondary" onPress={() => navigation.navigate("TravellerTwin")} /><AppButton title="Open live guide" onPress={() => navigation.navigate("DigitalTwin", { destination })} /></View>
+  </ScrollView>;
 }
-const styles = StyleSheet.create({ page: { padding: 20, paddingTop: 30, paddingBottom: 40, backgroundColor: colors.warmWhite }, header: { flexDirection: "row", justifyContent: "space-between", marginBottom: 22 }, kicker: { color: colors.saffron, fontSize: 10, fontWeight: "700", letterSpacing: 1.1 }, greeting: { fontSize: 24, fontWeight: "700", color: colors.charcoal, marginVertical: 5 }, muted: { color: colors.muted, fontSize: 12, lineHeight: 18 }, avatar: { width: 42, height: 42, borderRadius: 21, backgroundColor: "#E8D0B8", textAlign: "center", textAlignVertical: "center", overflow: "hidden", color: "#654437", fontWeight: "700", fontSize: 12 }, twinCard: { backgroundColor: colors.indigo, borderColor: colors.indigo, marginBottom: 22 }, badge: { color: "#DDE0FF", fontSize: 9, fontWeight: "700", letterSpacing: 1 }, heroTitle: { color: colors.white, fontSize: 28, fontWeight: "700", marginVertical: 15 }, heroCopy: { color: "#D9DBF1", fontSize: 12, marginBottom: 18 }, heading: { color: colors.charcoal, fontSize: 16, fontWeight: "700", marginBottom: 11 }, metrics: { flexDirection: "row", gap: 8, marginBottom: 14 }, highlight: { backgroundColor: colors.sand, borderColor: colors.sand, marginBottom: 22 }, highlightTitle: { color: colors.charcoal, fontWeight: "700", fontSize: 14, marginVertical: 7 }, actions: { gap: 9 } });
+
+const styles = StyleSheet.create({
+  page: { padding: 20, paddingTop: 30, paddingBottom: 40, backgroundColor: colors.warmWhite },
+  header: { flexDirection: "row", justifyContent: "space-between", marginBottom: 20 },
+  kicker: { color: colors.saffron, fontSize: 10, fontWeight: "700", letterSpacing: 1.1 },
+  greeting: { fontSize: 24, fontWeight: "700", color: colors.charcoal, marginVertical: 5 },
+  muted: { color: colors.muted, fontSize: 12, lineHeight: 18 },
+  avatar: { width: 42, height: 42, borderRadius: 21, backgroundColor: "#E8D0B8", textAlign: "center", textAlignVertical: "center", overflow: "hidden", color: "#654437", fontWeight: "700", fontSize: 12 },
+  sectionSpacing: { marginTop: 22 },
+  preview: { marginTop: 14, backgroundColor: colors.indigoSoft, borderColor: colors.indigoSoft },
+  previewTitle: { color: colors.charcoal, fontSize: 16, fontWeight: "700", marginVertical: 7 },
+  highlight: { marginTop: 14, backgroundColor: colors.sand, borderColor: colors.sand },
+  highlightTitle: { color: colors.charcoal, fontWeight: "700", fontSize: 14, lineHeight: 20, marginTop: 7 },
+  action: { color: colors.charcoal, fontSize: 14, fontWeight: "700", marginVertical: 10 },
+  actions: { gap: 9, marginTop: 14 },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", gap: 10, backgroundColor: colors.warmWhite },
+  empty: { flex: 1, justifyContent: "center", padding: 28, backgroundColor: colors.warmWhite },
+  title: { color: colors.charcoal, fontSize: 32, fontWeight: "700", marginVertical: 10 },
+  copy: { color: colors.muted, fontSize: 15, lineHeight: 22, marginBottom: 20 },
+});
