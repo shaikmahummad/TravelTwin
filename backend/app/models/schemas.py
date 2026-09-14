@@ -5,15 +5,28 @@ from pydantic import BaseModel, Field
 
 
 class TravellerProfileInput(BaseModel):
-    user_id: UUID
-    display_name: str | None = None
-    travel_style: str = "cultural"
-    interests: list[str] = Field(default_factory=list)
-    walking_comfort: str = "comfortable"
-    language_preference: str = "English"
-    budget_range: str = "medium"
-    time_available: str = "half_day"
-    safety_preference: str = "balanced"
+    user_id: str
+    name: str
+    travel_style: str
+    interests: list[str] = Field(min_length=1)
+    budget_range: str
+    walking_comfort: str
+    preferred_language: str
+    safety_preference: str
+
+
+class TravellerProfile(BaseModel):
+    id: UUID | None = None
+    user_id: str
+    name: str
+    travel_style: str
+    interests: list[str]
+    budget_range: str
+    walking_comfort: str
+    preferred_language: str
+    safety_preference: str
+    created_at: str | None = None
+    updated_at: str | None = None
 
 
 class ItineraryRequest(BaseModel):

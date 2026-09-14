@@ -3,15 +3,14 @@ create extension if not exists "pgcrypto";
 
 create table if not exists traveller_profiles (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null unique,
-  display_name text,
-  travel_style text not null default 'cultural',
-  interests text[] not null default '{}',
-  walking_comfort text not null default 'comfortable',
-  language_preference text not null default 'English',
-  budget_range text not null default 'medium',
-  time_available text not null default 'half_day',
-  safety_preference text not null default 'balanced',
+  user_id text not null unique,
+  name text not null,
+  travel_style text not null,
+  interests text[] not null,
+  budget_range text not null,
+  walking_comfort text not null,
+  preferred_language text not null,
+  safety_preference text not null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
