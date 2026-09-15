@@ -101,6 +101,3 @@ Personalization is intentionally rule-based: Forts recommend Hampi, spiritual in
 - `POST /chat`
 
 
-- Do this commits count? Let's check
-
-- Yes, they do haha
