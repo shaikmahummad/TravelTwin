@@ -99,3 +99,6 @@ Personalization is intentionally rule-based: Forts recommend Hampi, spiritual in
 - `POST /generate-itinerary`
 - `POST /smart-reroute`
 - `POST /chat`
+
+
+- Do this commits count? Let's check
