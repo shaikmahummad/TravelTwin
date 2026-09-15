@@ -102,3 +102,5 @@ Personalization is intentionally rule-based: Forts recommend Hampi, spiritual in
 
 
 - Do this commits count? Let's check
+
+- Yes, they do haha
